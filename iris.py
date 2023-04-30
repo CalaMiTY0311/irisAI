@@ -2,18 +2,7 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-#from sklearn.datasets import load_iris
-
-iris_datas = 'https://raw.githubusercontent.com/blackdew/tensorflow1/master/csv/iris.csv'
-#iris_datas = load_iris()
-
-iris = pd.read_csv(iris_datas)
-iris = pd.get_dummies(iris)
-
-inde_var = iris[['꽃잎길이', '꽃잎폭', '꽃받침길이', '꽃받침폭']]               #독립변수 
-depe_var = iris[['품종_setosa', '품종_versicolor', '품종_virginica']]          #종속변수
-
-print(inde_var.shape,depe_var.shape)
+from img_datas import X_train, X_test, Y_train, Y_test
 
 
 model = tf.keras.models.Sequential([
@@ -32,20 +21,20 @@ model.compile(
 
 model.summary()
 
-history = model.fit(np.array(inde_var),np.array(depe_var), epochs=500) #verbose=0
+history = model.fit(X_train,Y_train, validation_data=(X_test, Y_test), epochs=500) #verbose=0
 
-#print(model.predict(inde_var))
-print(depe_var)
+
 
 plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train_loss'])
 plt.show()
 
 plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train_accuracy'])
 plt.show()
-"""
